@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>حاسبة حافز الجاري مدين</title>
+<style>
+:root{
+  --brand:#13795b;
+  --brand-2:#0e5f49;
+  --mint:#eaf7f2;
+  --mint-2:#f4fbf8;
+  --ink:#14221e;
+  --muted:#66736e;
+  --line:#dce8e3;
+  --white:#ffffff;
+  --shadow:0 24px 70px rgba(20,60,48,.12);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:"Tahoma","Arial",sans-serif; color:var(--ink);
+  background:linear-gradient(180deg,#f7fbf9 0%,#eef6f2 100%);
+}
+.page{max-width:1180px;margin:0 auto;padding:28px 18px 48px}
+.hero{
+  position:relative; overflow:hidden; border-radius:30px; padding:34px;
+  background:radial-gradient(circle at 86% 22%,rgba(255,255,255,.32),transparent 27%),
+             linear-gradient(135deg,var(--brand-2),var(--brand));
+  color:white; box-shadow:var(--shadow); margin-bottom:22px;
+}
+.hero:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;left:-100px;bottom:-180px;background:rgba(255,255,255,.08)}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.2px;background:rgba(255,255,255,.14);padding:9px 14px;border:1px solid rgba(255,255,255,.16);border-radius:999px}
+.dot{width:8px;height:8px;border-radius:50%;background:#c9f3df;box-shadow:0 0 0 5px rgba(201,243,223,.12)}
+h1{margin:16px 0 10px;font-size:clamp(28px,4vw,44px);line-height:1.15}
+.hero p{margin:0;max-width:850px;color:rgba(255,255,255,.88);line-height:1.8;font-size:16px}
+.grid{display:grid;grid-template-columns:1fr;gap:22px;align-items:start}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 14px 40px rgba(20,60,48,.07)}
+.calculator-card{border-color:#c7e3d7;box-shadow:0 18px 55px rgba(20,60,48,.10)}
+.steps-card{margin-top:2px}
+.card-head{padding:23px 24px 14px;border-bottom:1px solid var(--line)}
+.card-head h2{margin:0 0 6px;font-size:21px}.card-head p{margin:0;color:var(--muted);line-height:1.7;font-size:14px}
+.content{padding:22px 24px 24px}
+.steps{display:grid;gap:12px}
+.step{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;padding:14px;border:1px solid #e2eee9;background:var(--mint-2);border-radius:18px}
+.num{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:var(--mint);color:var(--brand-2);font-weight:800}
+.step strong{display:block;margin:2px 0 5px;font-size:15px}.step span{color:var(--muted);font-size:13px;line-height:1.75}
+.note{margin-top:16px;padding:14px 16px;background:#fff8e6;border:1px solid #f0dfb6;color:#6a541a;border-radius:16px;font-size:13px;line-height:1.8}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{position:relative}.field.full{grid-column:1/-1}
+label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-weight:800;margin-bottom:8px}
+.hint{font-weight:500;color:var(--muted)}
+input,select{width:100%;height:48px;border:1px solid #cfe0d9;border-radius:14px;background:white;padding:0 14px;font:inherit;color:var(--ink);outline:none;transition:.18s}
+input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(19,121,91,.10)}
+.input-wrap{position:relative}.suffix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted);pointer-events:none}.input-wrap input{padding-left:62px}
+.helper{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+.actions{display:flex;gap:10px;margin-top:18px}.btn{border:0;border-radius:14px;height:50px;padding:0 18px;font:inherit;font-weight:800;cursor:pointer}.primary{flex:1;background:var(--brand);color:#fff}.secondary{background:#eef5f2;color:var(--brand-2)}
+.result{margin-top:18px;border-radius:22px;padding:22px;background:linear-gradient(145deg,#f1faf6,#e6f5ef);border:1px solid #cde8dc}
+.result-top{display:flex;justify-content:space-between;gap:16px;align-items:end}.label-small{font-size:12px;color:var(--muted);font-weight:700}.big{font-size:38px;font-weight:900;letter-spacing:-1px;color:var(--brand-2);margin-top:3px}.currency{font-size:15px;font-weight:800;margin-right:5px}
+.badge{padding:9px 12px;border-radius:999px;font-size:12px;font-weight:900;background:white;border:1px solid #d4e7df;color:var(--brand-2);white-space:nowrap}
+.breakdown{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:18px}
+.item{background:#fff;border:1px solid #dfebe6;border-radius:14px;padding:12px}.item .t{font-size:11px;color:var(--muted)}.item .v{margin-top:4px;font-weight:900}
+.warning{margin-top:12px;padding:12px 14px;border-radius:14px;background:#fff2f0;border:1px solid #f3d1ca;color:#8a392c;font-size:12px;line-height:1.7}
+.ok{background:#eef9f2;border-color:#cce8d5;color:#276240}
+.formula{margin-top:12px;font-size:11px;color:var(--muted);line-height:1.7}
+.footer{margin-top:18px;text-align:center;color:#8a9691;font-size:11px;line-height:1.7}
+@media(max-width:860px){.grid{grid-template-columns:1fr}.hero{padding:26px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.breakdown{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.page{padding:14px 12px 32px}.content,.card-head{padding-left:17px;padding-right:17px}.result-top{align-items:flex-start;flex-direction:column}.big{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero">
+    <div class="kicker"><span class="dot"></span> الجاري مدين</div>
+    <h1>حاسبة حافز الجاري مدين</h1>
+    <p>احسب الحافز الشهري بشكل سريع وواضح: الاستخدام الفعلي + عدد أيام الاستخدام + بدل الانتقال + نسبة المخاطر.</p>
+  </section>
+
+  <div class="grid">
+    <section class="card calculator-card">
+      <div class="card-head"><h2>احسب الحافز</h2><p>اكتب الأرقام الأساسية، والنتيجة هتظهر قدامك بالتفصيل.</p></div>
+      <div class="content">
+        <div class="form-grid">
+          <div class="field">
+            <label>إجمالي الحد الائتماني <span class="hint">جنيه</span></label>
+            <div class="input-wrap"><input id="limit" type="number" min="0" step="1000" value="1000000"><span class="suffix">جنيه</span></div>
+          </div>
+          <div class="field">
+            <label>متوسط الاستخدام <span class="hint">جنيه / يوم</span></label>
+            <div class="input-wrap"><input id="usage" type="number" min="0" step="1000" value="300000"><span class="suffix">جنيه</span></div>
+          </div>
+          <div class="field">
+            <label>عدد أيام الاستخدام <span class="hint">بحد أقصى 30</span></label>
+            <input id="days" type="number" min="0" max="30" step="1" value="10">
+            <div class="helper">المادة بتوضح أمثلة على 10 و20 و30 يوم.</div>
+          </div>
+          <div class="field">
+            <label>عدد العملاء المفعلين <span class="hint">عميل</span></label>
+            <input id="clients" type="number" min="0" step="1" value="3">
+          </div>
+          <div class="field full">
+            <label>نسبة المخاطر <span class="hint">٪</span></label>
+            <input id="risk" type="number" min="0" step="0.1" value="1">
+            <div class="helper">0%–2% = صرف 100% · أكثر من 2%–3% = 85% · أكثر من 3%–4% = 70% · أكثر من 4% = لا يصرف الحافز.</div>
+          </div>
+        </div>
+        <div class="actions"><button class="btn primary" onclick="calculate()">احسب الحافز</button><button class="btn secondary" onclick="resetForm()">إعادة</button></div>
+        <div id="result" class="result"></div>
+      </div>
+    </section>
+
+    <section class="card steps-card">
+      <div class="card-head"><h2>الفكرة في 5 خطوات</h2><p>المعادلة مبنية على شرح الحوافز في المادة التدريبية.</p></div>
+      <div class="content">
+        <div class="steps">
+          <div class="step"><div class="num">1</div><div><strong>تفعيل العميل</strong><span>إصدار التمويل وحده مش كفاية؛ العميل لازم يكون مفعل ويحقق شرط الاستخدام.</span></div></div>
+          <div class="step"><div class="num">2</div><div><strong>استخدام 30% على الأقل</strong><span>الحافز مرتبط بالاستخدام الفعلي، والشرط الأساسي في المادة هو الوصول إلى 30% على الأقل من الحد الائتماني.</span></div></div>
+          <div class="step"><div class="num">3</div><div><strong>حساب حافز الاستخدام</strong><span>نحدد شريحة متوسط الاستخدام اليومي، ثم نحسب الحافز بنسبة الاستخدام الفعلية وعدد أيام الاستخدام.</span></div></div>
+          <div class="step"><div class="num">4</div><div><strong>إضافة بدل الانتقال</strong><span>بدل الانتقال بيتحدد حسب عدد العملاء المفعلين خلال الشهر.</span></div></div>
+          <div class="step"><div class="num">5</div><div><strong>تطبيق نسبة المخاطر</strong><span>في النهاية بيتطبق معامل صرف الحافز حسب نسبة المخاطر، وده يطلع الحافز النهائي.</span></div></div>
+        </div>
+        <div class="note"><b>مهم:</b> الحافز بيتحسب على الشهر كامل (30 يوم)، وشرط التفعيل في المادة مرتبط باستخدام 30% من الحد الائتماني الممنوح.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">الحساب هنا للتوضيح وفقًا للصيغة والأرقام الواردة في المادة.</div>
+</div>
+<script>
+const money = n => new Intl.NumberFormat('ar-EG',{maximumFractionDigits:0}).format(Math.max(0,n));
+const pct = n => new Intl.NumberFormat('ar-EG',{maximumFractionDigits:1}).format(n) + '٪';
+function allowancePerClient(clients){
+  if(clients>=1 && clients<=5) return 50;
+  if(clients>=6 && clients<=10) return 75;
+  if(clients>10) return 100;
+  return 0;
+}
+function riskFactor(r){
+  if(r<=2) return {factor:1, label:'100%'};
+  if(r<=3) return {factor:.85, label:'85%'};
+  if(r<=4) return {factor:.70, label:'70%'};
+  return {factor:0, label:'0% — لا يتم صرف الحافز'};
+}
+function calculate(){
+  const limit=Math.max(0,Number(document.getElementById('limit').value)||0);
+  const usage=Math.max(0,Number(document.getElementById('usage').value)||0);
+  const days=Math.min(30,Math.max(0,Number(document.getElementById('days').value)||0));
+  const clients=Math.max(0,Math.floor(Number(document.getElementById('clients').value)||0));
+  const risk=Math.max(0,Number(document.getElementById('risk').value)||0);
+  const usagePct = limit ? usage/limit*100 : 0;
+  const validUsageVsLimit = limit>0 && usage<=limit;
+  const validLimit = limit>0;
+  let rate=0, band='أقل من الحد المطلوب';
+  if(usage>=200000 && usage<400000){rate=150;band='من 200 ألف إلى أقل من 400 ألف'}
+  else if(usage>=400000 && usage<800000){rate=175;band='من 400 ألف إلى أقل من 800 ألف'}
+  else if(usage>=800000 && usage<1250000){rate=200;band='من 800 ألف إلى أقل من 1.25 مليون'}
+  else if(usage>=1250000){rate=225;band='1.25 مليون فأكثر'}
+  const usageIncentive = usage>=0 && rate>0 ? (usage/1000000)*rate*days : 0;
+  const travel = allowancePerClient(clients)*clients;
+  const rf=riskFactor(risk);
+  const eligible30 = validLimit && validUsageVsLimit && usagePct>=30;
+  const invalidDays = Number(document.getElementById('days').value)>30 || Number(document.getElementById('days').value)<0;
+  const invalidClients = Number(document.getElementById('clients').value)<0;
+  const invalidRisk = Number(document.getElementById('risk').value)<0;
+  const inputInvalid = !validLimit || !validUsageVsLimit || invalidDays || invalidClients || invalidRisk;
+  const finalIncentive = !inputInvalid && eligible30 ? (usageIncentive+travel)*rf.factor : 0;
+  let status = eligible30 ? `<div class="badge">مستوفي شرط 30%</div>` : `<div class="badge" style="color:#8a392c">غير مستوفي شرط 30%</div>`;
+  let warning='';
+  if(!validLimit) warning=`<div class="warning">من فضلك أدخل حد ائتماني أكبر من صفر، لأن نسبة الاستخدام لا يمكن حسابها من غيره.</div>`;
+  else if(usage>limit) warning=`<div class="warning">متوسط الاستخدام لا يمكن يكون أكبر من الحد الائتماني. عدّل الأرقام بحيث الاستخدام ≤ الحد الائتماني.</div>`;
+  else if(invalidDays) warning=`<div class="warning">عدد أيام الاستخدام لازم يكون من 0 إلى 30 يوم.</div>`;
+  else if(invalidClients) warning=`<div class="warning">عدد العملاء المفعلين لازم يكون 0 أو أكثر.</div>`;
+  else if(invalidRisk) warning=`<div class="warning">نسبة المخاطر لازم تكون 0% أو أكثر.</div>`;
+  else if(!eligible30) warning=`<div class="warning">متوسط الاستخدام الحالي <b>${pct(usagePct)}</b> من الحد الائتماني، لذلك شرط 30% غير متحقق والحافز النهائي = <b>0 جنيه</b> في هذه الحاسبة.</div>`;
+  else if(rate===0) warning=`<div class="warning">متوسط الاستخدام داخل نطاق لا توجد له شريحة حافز في الجدول التدريبي، لذلك تم احتساب حافز الاستخدام = 0.</div>`;
+  else if(risk>4) warning=`<div class="warning">نسبة المخاطر أعلى من 4%، والمادة تنص على عدم صرف الحافز.</div>`;
+  else warning=`<div class="warning ok">تم تطبيق نسبة صرف الحافز <b>${rf.label}</b> حسب شريحة المخاطر.</div>`;
+  document.getElementById('result').innerHTML=`
+    <div class="result-top"><div><div class="label-small">الحافز النهائي المتوقع</div><div class="big">${money(finalIncentive)} <span class="currency">جنيه</span></div></div>${status}</div>
+    <div class="breakdown">
+      <div class="item"><div class="t">نسبة الاستخدام</div><div class="v">${pct(usagePct)}</div></div>
+      <div class="item"><div class="t">شريحة الاستخدام</div><div class="v">${rate?money(rate)+' جنيه / مليون / يوم':'لا توجد'}</div></div>
+      <div class="item"><div class="t">حافز الاستخدام</div><div class="v">${money(usageIncentive)} جنيه</div></div>
+      <div class="item"><div class="t">بدل الانتقال</div><div class="v">${money(travel)} جنيه</div></div>
+    </div>
+    ${warning}
+    <div class="formula">المعادلة: (حافز الاستخدام + بدل الانتقال) × نسبة صرف الحافز.</div>`;
+}
+function resetForm(){
+  document.getElementById('limit').value=1000000;
+  document.getElementById('usage').value=300000;
+  document.getElementById('days').value=10;
+  document.getElementById('clients').value=3;
+  document.getElementById('risk').value=1;
+  calculate();
+}
+calculate();
+</script>
+</body>
+</html>
